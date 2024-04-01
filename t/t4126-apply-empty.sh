@@ -66,4 +66,29 @@ test_expect_success 'apply --index create' '
 	git diff --exit-code
 '
 
+test_expect_success 'parsing a patch with no-contents and a funny pathname' '
+	git reset --hard &&
+	empty_blob=$(test_oid empty_blob) &&
+	echo "$empty_blob" >expect &&
+
+	git update-index --add --cacheinfo "100644,$empty_blob,funny /empty" &&
+	git diff --cached HEAD -- "funny /" >sample.patch &&
+	git diff --cached -R HEAD -- "funny /" >elpmas.patch &&
+	git reset &&
+
+	git apply --cached --stat --check --apply sample.patch &&
+	git rev-parse --verify ":funny /empty" >actual &&
+	test_cmp expect actual &&
+
+	git apply --cached --stat --check --apply elpmas.patch &&
+	test_must_fail git rev-parse --verify ":funny /empty" &&
+
+	git apply -R --cached --stat --check --apply elpmas.patch &&
+	git rev-parse --verify ":funny /empty" >actual &&
+	test_cmp expect actual &&
+
+	git apply -R --cached --stat --check --apply sample.patch &&
+	test_must_fail git rev-parse --verify ":funny /empty"
+'
+
 test_done
