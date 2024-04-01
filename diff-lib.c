@@ -101,7 +101,8 @@ static int match_stat_with_submodule(struct diff_options *diffopt,
 	return changed;
 }
 
-void run_diff_files(struct rev_info *revs, unsigned int option)
+void run_diff_files(struct rev_info *revs, char *ps_matched,
+		    unsigned int option)
 {
 	int entries, i;
 	int diff_unmerged_stage = revs->max_count;
@@ -127,7 +128,7 @@ void run_diff_files(struct rev_info *revs, unsigned int option)
 		if (diff_can_quit_early(&revs->diffopt))
 			break;
 
-		if (!ce_path_match(istate, ce, &revs->prune_data, NULL))
+		if (!ce_path_match(istate, ce, &revs->prune_data, ps_matched))
 			continue;
 
 		if (revs->diffopt.prefix &&

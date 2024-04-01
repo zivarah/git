@@ -283,7 +283,7 @@ static void builtin_diff_files(struct rev_info *revs, int argc, const char **arg
 				    0) < 0) {
 		die_errno("repo_read_index_preload");
 	}
-	run_diff_files(revs, options);
+	run_diff_files(revs, NULL, options);
 }
 
 struct symdiff {

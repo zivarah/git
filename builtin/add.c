@@ -191,7 +191,7 @@ static int edit_patch(int argc, const char **argv, const char *prefix)
 	out = xopen(file, O_CREAT | O_WRONLY | O_TRUNC, 0666);
 	rev.diffopt.file = xfdopen(out, "w");
 	rev.diffopt.close_file = 1;
-	run_diff_files(&rev, 0);
+	run_diff_files(&rev, NULL, 0);
 
 	if (launch_editor(file, NULL, NULL))
 		die(_("editing patch failed"));
@@ -368,6 +368,7 @@ int cmd_add(int argc, const char **argv, const char *prefix)
 	int add_new_files;
 	int require_pathspec;
 	char *seen = NULL;
+	char *ps_matched = NULL;
 	struct lock_file lock_file = LOCK_INIT;
 
 	git_config(add_config, NULL);
@@ -543,14 +544,19 @@ int cmd_add(int argc, const char **argv, const char *prefix)
 		string_list_clear(&only_match_skip_worktree, 0);
 	}
 
+
 	begin_odb_transaction();
 
+	ps_matched = xcalloc(pathspec.nr, 1);
 	if (add_renormalize)
 		exit_status |= renormalize_tracked_files(&pathspec, flags);
 	else
 		exit_status |= add_files_to_cache(the_repository, prefix,
-						  &pathspec, include_sparse,
-						  flags);
+						  &pathspec, ps_matched,
+						  include_sparse, flags);
+
+	if (take_worktree_changes)
+		exit_status |= report_path_error(ps_matched, &pathspec);
 
 	if (add_new_files)
 		exit_status |= add_files(&dir, flags);
@@ -564,6 +570,7 @@ finish:
 			       COMMIT_LOCK | SKIP_IF_UNCHANGED))
 		die(_("unable to write new index file"));
 
+	free(ps_matched);
 	dir_clear(&dir);
 	clear_pathspec(&pathspec);
 	return exit_status;

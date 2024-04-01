@@ -572,7 +572,7 @@ static int get_modified_files(struct repository *r,
 			run_diff_index(&rev, DIFF_INDEX_CACHED);
 		else {
 			rev.diffopt.flags.ignore_dirty_submodules = 1;
-			run_diff_files(&rev, 0);
+			run_diff_files(&rev, NULL, 0);
 		}
 
 		release_revisions(&rev);

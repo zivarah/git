@@ -3958,8 +3958,8 @@ static void update_callback(struct diff_queue_struct *q,
 }
 
 int add_files_to_cache(struct repository *repo, const char *prefix,
-		       const struct pathspec *pathspec, int include_sparse,
-		       int flags)
+		       const struct pathspec *pathspec, char *ps_matched,
+		       int include_sparse, int flags)
 {
 	struct update_callback_data data;
 	struct rev_info rev;
@@ -3985,7 +3985,7 @@ int add_files_to_cache(struct repository *repo, const char *prefix,
 	 * may not have their own transaction active.
 	 */
 	begin_odb_transaction();
-	run_diff_files(&rev, DIFF_RACY_IS_MODIFIED);
+	run_diff_files(&rev, ps_matched, DIFF_RACY_IS_MODIFIED);
 	end_odb_transaction();
 
 	release_revisions(&rev);
