@@ -827,7 +827,7 @@ static struct commit **find_commits_for_midx_bitmap(uint32_t *indexed_commits_nr
 }
 
 static int write_midx_bitmap(struct write_midx_context *ctx,
-			     const char *object_dir, const char *midx_name,
+			     const char *object_dir,
 			     const unsigned char *midx_hash,
 			     struct packing_data *pdata,
 			     struct commit **commits,
@@ -1415,7 +1415,7 @@ static int write_midx_internal(const char *object_dir,
 		FREE_AND_NULL(ctx.entries);
 		ctx.entries_nr = 0;
 
-		if (write_midx_bitmap(&ctx, object_dir, midx_name.buf,
+		if (write_midx_bitmap(&ctx, object_dir,
 				      midx_hash, &pdata, commits, commits_nr,
 				      flags) < 0) {
 			error(_("could not write multi-pack bitmap"));
