@@ -385,11 +385,11 @@ __attribute__((format (printf,2,3)))
 void strbuf_addf(struct strbuf *sb, const char *fmt, ...);
 
 /**
- * Add a formatted string prepended by a comment character and a
+ * Add a formatted string prepended by the comment character and a
  * blank to the buffer.
  */
-__attribute__((format (printf, 3, 4)))
-void strbuf_commented_addf(struct strbuf *sb, const char *comment_prefix, const char *fmt, ...);
+__attribute__((format (printf,2,3)))
+void strbuf_comment_addf(struct strbuf *sb, const char *fmt, ...);
 
 __attribute__((format (printf,2,0)))
 void strbuf_vaddf(struct strbuf *sb, const char *fmt, va_list ap);

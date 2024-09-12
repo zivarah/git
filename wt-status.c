@@ -1111,7 +1111,7 @@ void wt_status_append_cut_line(struct strbuf *buf)
 {
 	const char *explanation = _("Do not modify or remove the line above.\nEverything below it will be ignored.");
 
-	strbuf_commented_addf(buf, comment_line_str, "%s", cut_line);
+	strbuf_comment_addf(buf,  "%s", cut_line);
 	strbuf_add_commented_lines(buf, explanation, strlen(explanation), comment_line_str);
 }
 
