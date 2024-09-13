@@ -186,6 +186,11 @@
 	(INFO) A ref does not end with newline. This will be
 	considered an error in the future.
 
+`symlinkRef`::
+	(INFO) A symref uses the symbolic link. This kind of symref may
+	be considered ERROR in the future when totally dropping the
+	symlink support.
+
 `trailingRefContent`::
 	(INFO) A ref has trailing content. This will be
 	considered an error in the future.
