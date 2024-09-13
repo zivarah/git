@@ -173,6 +173,14 @@
 `nullSha1`::
 	(WARN) Tree contains entries pointing to a null sha1.
 
+`refMissingNewline`::
+	(INFO) A ref does not end with newline. This will be
+	considered an error in the future.
+
+`trailingRefContent`::
+	(INFO) A ref has trailing content. This will be
+	considered an error in the future.
+
 `treeNotSorted`::
 	(ERROR) A tree is not properly sorted.
 
