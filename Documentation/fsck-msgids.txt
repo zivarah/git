@@ -28,6 +28,12 @@
 `badRefName`::
 	(ERROR) A ref has an invalid format.
 
+`badReferentFiletype`::
+	(ERROR) The referent of a symref has a bad file type.
+
+`badReferentName`::
+	(ERROR) The referent name of a symref is invalid.
+
 `badTagName`::
 	(INFO) A tag has an invalid format.
 
@@ -48,6 +54,9 @@
 
 `emptyName`::
 	(WARN) A path contains an empty name.
+
+`escapeReferent`::
+	(ERROR) The referent of a symref is outside the "ref" directory.
 
 `extraHeaderEntry`::
 	(IGNORE) Extra headers found after `tagger`.
