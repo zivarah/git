@@ -13,6 +13,7 @@
 #include "dir.h"
 #include "fsmonitor-ll.h"
 #include "advice.h"
+#include "worktree.h"
 
 /**
  * This global is used by expand_index() to determine if we should give the
@@ -143,9 +144,24 @@ static int index_has_unmerged_entries(struct index_state *istate)
 	return 0;
 }
 
-int is_sparse_index_allowed(struct index_state *istate, int flags)
+int is_sparse_index_allowed_in_current_worktree(struct index_state *istate, int flags)
 {
-	if (!core_apply_sparse_checkout || !core_sparse_checkout_cone)
+	return is_sparse_index_allowed(istate, flags, core_apply_sparse_checkout, core_sparse_checkout_cone);
+
+}
+
+int is_sparse_index_allowed_in_worktree(struct worktree *wt, struct index_state *istate, int flags)
+{
+	int apply_sparse_checkout, sparse_checkout_cone;
+
+	git_configset_get_bool(wt->repo->config, "core.sparseCheckout", &apply_sparse_checkout);
+	git_configset_get_bool(wt->repo->config, "core.sparseCheckoutCone", &sparse_checkout_cone);
+	return is_sparse_index_allowed(istate, flags, apply_sparse_checkout, sparse_checkout_cone);
+}
+
+int is_sparse_index_allowed(struct index_state *istate, int flags, int apply_sparse_checkout, int sparse_checkout_cone)
+{
+	if (!apply_sparse_checkout || !sparse_checkout_cone)
 		return 0;
 
 	if (!(flags & SPARSE_INDEX_MEMORY_ONLY)) {
@@ -196,7 +212,7 @@ int convert_to_sparse(struct index_state *istate, int flags)
 	 * cannot be converted to sparse, do not convert.
 	 */
 	if (istate->sparse_index == INDEX_COLLAPSED || !istate->cache_nr ||
-	    !is_sparse_index_allowed(istate, flags))
+	    !is_sparse_index_allowed_in_current_worktree(istate, flags))
 		return 0;
 
 	/*
@@ -455,13 +471,13 @@ void ensure_full_index(struct index_state *istate)
 	expand_index(istate, NULL);
 }
 
-void ensure_correct_sparsity(struct index_state *istate)
+void ensure_correct_sparsity(struct index_state *istate, struct worktree *worktree)
 {
 	/*
 	 * If the index can be sparse, make it sparse. Otherwise,
 	 * ensure the index is full.
 	 */
-	if (is_sparse_index_allowed(istate, 0))
+	if (is_sparse_index_allowed_in_worktree(worktree, istate, 0))
 		convert_to_sparse(istate, 0);
 	else
 		ensure_full_index(istate);

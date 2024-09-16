@@ -1142,9 +1142,13 @@ static int unlock_worktree(int ac, const char **av, const char *prefix)
 
 static void validate_no_submodules(const struct worktree *wt)
 {
-	struct index_state istate = INDEX_STATE_INIT(the_repository);
+	struct index_state istate = INDEX_STATE_INIT(wt->repo);
 	struct strbuf path = STRBUF_INIT;
 	int i, found_submodules = 0;
+	int apply_sparse_checkout, sparse_checkout_cone;
+
+	git_configset_get_bool(wt->repo->config, "core.sparseCheckout", &apply_sparse_checkout);
+	git_configset_get_bool(wt->repo->config, "core.sparseCheckoutCone", &sparse_checkout_cone);
 
 	if (is_directory(worktree_git_path(wt, "modules"))) {
 		/*

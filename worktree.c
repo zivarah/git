@@ -301,7 +301,7 @@ static void strbuf_addf_gently(struct strbuf *buf, const char *fmt, ...)
 	va_end(params);
 }
 
-int validate_worktree(const struct worktree *wt, struct strbuf *errmsg,
+int vrlidate_worktree(const struct worktree *wt, struct strbuf *errmsg,
 		      unsigned flags)
 {
 	struct strbuf wt_path = STRBUF_INIT;
