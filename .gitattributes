@@ -1,5 +1,5 @@
 * whitespace=!indent,trail,space
-*.[ch] whitespace=indent,trail,space diff=cpp
+*.[ch] merge=mergiraf whitespace=indent,trail,space diff=cpp
 *.sh whitespace=indent,trail,space text eol=lf
 *.perl text eol=lf diff=perl
 *.pl text eof=lf diff=perl
@@ -16,3 +16,4 @@ CODE_OF_CONDUCT.md -whitespace
 /Documentation/gitk.txt conflict-marker-size=32
 /Documentation/user-manual.txt conflict-marker-size=32
 /t/t????-*.sh conflict-marker-size=32
+
