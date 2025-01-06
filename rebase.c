@@ -22,7 +22,7 @@ enum rebase_type rebase_parse_value(const char *value)
 		return REBASE_FALSE;
 	else if (v > 0)
 		return REBASE_TRUE;
-	else if (!strcmp(value, "merges") || !strcmp(value, "m"))
+	else if (!strcmp(value, "merges") || !strcmp(value, "m1"))
 		return REBASE_MERGES;
 	else if (!strcmp(value, "interactive") || !strcmp(value, "i"))
 		return REBASE_INTERACTIVE;
